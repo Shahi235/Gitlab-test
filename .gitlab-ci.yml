@@ -1,0 +1,111 @@
+# GitLab CI/CD Pipeline for Vite React Project
+image: node:18-alpine
+
+# Define stages
+stages:
+  - install
+  - lint
+  - build
+  - deploy
+
+# Cache node_modules for faster builds
+cache:
+  paths:
+    - vite-project/node_modules/
+  key: "$CI_COMMIT_REF_SLUG"
+
+# Variables
+variables:
+  NODE_ENV: "production"
+
+# Install dependencies
+install_dependencies:
+  stage: install
+  script:
+    - cd vite-project
+    - npm ci
+  artifacts:
+    paths:
+      - vite-project/node_modules/
+    expire_in: 1 hour
+  only:
+    - main
+    - develop
+    - merge_requests
+
+# Run linting
+lint:
+  stage: lint
+  script:
+    - cd vite-project
+    - npm run lint
+  dependencies:
+    - install_dependencies
+  only:
+    - main
+    - develop
+    - merge_requests
+
+# Build the project
+build:
+  stage: build
+  script:
+    - cd vite-project
+    - npm run build
+  artifacts:
+    paths:
+      - vite-project/dist/
+    expire_in: 1 week
+  dependencies:
+    - install_dependencies
+  only:
+    - main
+    - develop
+
+# Deploy to GitLab Pages (optional)
+pages:
+  stage: deploy
+  script:
+    - mkdir public
+    - cp -r vite-project/dist/* public/
+  artifacts:
+    paths:
+      - public
+  dependencies:
+    - build
+  only:
+    - main
+
+# Deploy to staging (optional - customize as needed)
+deploy_staging:
+  stage: deploy
+  script:
+    - echo "Deploying to staging environment..."
+    - cd vite-project
+    # Add your staging deployment commands here
+    # For example: rsync, scp, or API calls to your hosting provider
+  environment:
+    name: staging
+    url: https://staging.yourapp.com
+  dependencies:
+    - build
+  only:
+    - develop
+  when: manual
+
+# Deploy to production (optional - customize as needed)
+deploy_production:
+  stage: deploy
+  script:
+    - echo "Deploying to production environment..."
+    - cd vite-project
+    # Add your production deployment commands here
+    # For example: rsync, scp, or API calls to your hosting provider
+  environment:
+    name: production
+    url: https://yourapp.com
+  dependencies:
+    - build
+  only:
+    - main
+  when: manual

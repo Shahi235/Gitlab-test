@@ -76,36 +76,36 @@ pages:
   only:
     - main
 
-# Deploy to staging (optional - customize as needed)
-deploy_staging:
-  stage: deploy
-  script:
-    - echo "Deploying to staging environment..."
-    - cd vite-project
-    # Add your staging deployment commands here
-    # For example: rsync, scp, or API calls to your hosting provider
-  environment:
-    name: staging
-    url: https://staging.yourapp.com
-  dependencies:
-    - build
-  only:
-    - develop
-  when: manual
+# # Deploy to staging (optional - customize as needed)
+# deploy_staging:
+#   stage: deploy
+#   script:
+#     - echo "Deploying to staging environment..."
+#     - cd vite-project
+#     # Add your staging deployment commands here
+#     # For example: rsync, scp, or API calls to your hosting provider
+#   environment:
+#     name: staging
+#     url: https://staging.yourapp.com
+#   dependencies:
+#     - build
+#   only:
+#     - develop
+#   when: manual
 
-# Deploy to production (optional - customize as needed)
-deploy_production:
-  stage: deploy
-  script:
-    - echo "Deploying to production environment..."
-    - cd vite-project
-    # Add your production deployment commands here
-    # For example: rsync, scp, or API calls to your hosting provider
-  environment:
-    name: production
-    url: https://yourapp.com
-  dependencies:
-    - build
-  only:
-    - main
-  when: manual
+# # Deploy to production (optional - customize as needed)
+# deploy_production:
+#   stage: deploy
+#   script:
+#     - echo "Deploying to production environment..."
+#     - cd vite-project
+#     # Add your production deployment commands here
+#     # For example: rsync, scp, or API calls to your hosting provider
+#   environment:
+#     name: production
+#     url: https://yourapp.com
+#   dependencies:
+#     - build
+#   only:
+#     - main
+#   when: manual
